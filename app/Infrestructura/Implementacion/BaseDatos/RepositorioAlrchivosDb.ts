@@ -33,8 +33,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
 
         } else {
             try {
-                fs.unlinkSync(`${basePath}${archivosTemporalesBd.rutaArchivo}/${archivosTemporalesBd.nombreArchivo}`)
-                console.log('File removed')
+                fs.unlinkSync(`${basePath}${archivosTemporalesBd.rutaArchivo}/${archivosTemporalesBd.nombreArchivo}`)                
             } catch (err) {
                 console.error('Something wrong happened removing the file', err)
             }
