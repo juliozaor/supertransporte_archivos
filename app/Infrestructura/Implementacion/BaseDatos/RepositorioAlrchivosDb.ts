@@ -7,19 +7,16 @@ import { TblArchivosTemporales } from "App/Infrestructura/datos/entidades/Archiv
 export class RepositorioArchivosDb implements RepositorioArchivos {
 
     async crearArchivo(archivo: MultipartFileContract, datos: string): Promise<any> {
-        const basePath = './files';
-        const { idPregunta, idVigilado, temporal = true } = JSON.parse(datos);
+        const { idPregunta, idVigilado, temporal = false, rutaRaiz = 'temp' } = JSON.parse(datos);
+        const basePath = `./files`;
+        console.log(temporal); //no guardar en la tabla temporal cuando es false
 
-        //Parametro Temporal true
-
-
-
-        const { ruta, fecha } = this.crearCarpetaSiNoExiste(basePath);
+        const { ruta, fecha } = this.crearCarpetaSiNoExiste(basePath, rutaRaiz);
         const nombreAlmacenado = `${idPregunta}_${idVigilado}_${fecha}.${archivo.extname}`
         const nombreOriginalArchivo = archivo.clientName;
         let idTemporal;
 
-        
+
         const archivosTemporalesBd = await TblArchivosTemporales.query().where({ 'art_pregunta_id': idPregunta, 'art_usuario_id': idVigilado }).first()
         if (!archivosTemporalesBd) {
             const archivosTemporales = new TblArchivosTemporales()
@@ -38,9 +35,9 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
             try {
                 fs.unlinkSync(`${basePath}${archivosTemporalesBd.rutaArchivo}/${archivosTemporalesBd.nombreArchivo}`)
                 console.log('File removed')
-              } catch(err) {
+            } catch (err) {
                 console.error('Something wrong happened removing the file', err)
-              }
+            }
 
             archivosTemporalesBd.nombreOriginal = nombreOriginalArchivo
             archivosTemporalesBd.nombreArchivo = nombreAlmacenado
@@ -51,7 +48,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
             await archivo?.moveToDisk(`${ruta}`, {
                 name: nombreAlmacenado
             })
-            
+
 
         }
 
@@ -65,28 +62,29 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         return fs.existsSync(rutaCarpeta);
     }
 
-    crearCarpetaSiNoExiste = (basePath) => {
-        
+    crearCarpetaSiNoExiste = (basePath, rutaRaiz) => {
+
         const fechaCargue = new Date();
         const year = fechaCargue.getFullYear();
         const month = fechaCargue.getMonth() + 1;
         const fecha = this.format(fechaCargue);
 
-        const rutaCarpeta = `${basePath}/${year}/${month}`;
-        const ruta = `/${year}/${month}`
+        const ruta = `/${rutaRaiz}/${year}/${month}`
+        const raiz = `${basePath}/${rutaRaiz}`
+        const rutaAnio = `${raiz}/${year}`;
+        const rutaMes = `${rutaAnio}/${month}`;
 
-        if (!this.verificarCarpetaExiste(rutaCarpeta)) {
-            const rutaAnio = `${basePath}/${year}`;
-            if (!this.verificarCarpetaExiste(rutaAnio)) {
-                fs.mkdirSync(rutaAnio);
-                fs.mkdirSync(rutaCarpeta);
-                console.log('La carpeta ha sido creada. año mes')
-            } else {
-                fs.mkdirSync(rutaCarpeta);
-                console.log('La carpeta ha sido creada. solo mes')
-            }
-        } else {
-            console.log('La carpeta ya existe.')
+        if (!this.verificarCarpetaExiste(raiz)) {
+            fs.mkdirSync(raiz);
+            fs.mkdirSync(rutaAnio);
+            fs.mkdirSync(rutaMes);
+        }
+        if (!this.verificarCarpetaExiste(rutaAnio)) {
+            fs.mkdirSync(rutaAnio);
+            fs.mkdirSync(rutaMes);
+        }
+        if (!this.verificarCarpetaExiste(rutaMes)) {
+            fs.mkdirSync(rutaMes);
         }
 
         return { ruta, fecha };
@@ -94,22 +92,22 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
 
     format(inputDate: Date) {
         let date, month, year, hour, minute, second;
-    
+
         date = inputDate.getDate();
         month = inputDate.getMonth() + 1;
         year = inputDate.getFullYear();
         hour = inputDate.getHours();
         minute = inputDate.getMinutes();
         second = inputDate.getSeconds();
-    
+
         date = date.toString().padStart(2, '0');
         month = month.toString().padStart(2, '0');
         hour = hour.toString().padStart(2, '0');
         minute = minute.toString().padStart(2, '0');
         second = second.toString().padStart(2, '0');
-    
-          return `${year}${month}${date}${hour}${minute}${second}`;
-      }
+
+        return `${year}${month}${date}${hour}${minute}${second}`;
+    }
 
 
 
