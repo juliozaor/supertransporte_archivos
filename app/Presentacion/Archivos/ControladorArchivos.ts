@@ -28,7 +28,7 @@ export default class ControladorArchivos {
 
   }
 
-  public async obtener ({ request, response }:HttpContextContract) {
+  public async obtener ({ request}:HttpContextContract) {
     const datos = request.all();
    
       return this.servicio.obtenerArchivo(JSON.stringify(datos))
