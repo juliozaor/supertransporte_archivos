@@ -15,12 +15,13 @@ export default class ControladorArchivos {
       if (!archivo) {
         
         return response.status(400).send({
-          mensaje:'No se encontro el archivo'
+          mensaje:'No se encontro el archivo',
+          error: 2
         })
       }
 
       if (!archivo.isValid) {
-        return response.status(400).send({mensaje:'Formato incorrecto para el archivo'})
+        return response.status(400).send({mensaje:'Formato incorrecto para el archivo', error: 3})
       }
 
       return this.servicio.crearArchivo(archivo, JSON.stringify(datos))

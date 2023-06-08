@@ -8,7 +8,14 @@ import { Archivo } from "App/Dominio/Datos/Entidades/Archivo";
 export class RepositorioArchivosDb implements RepositorioArchivos {
 
     async crearArchivo(archivo: MultipartFileContract, datos: string): Promise<any> {
-        const { idPregunta, idVigilado, temporal = false, rutaRaiz = 'temp' } = JSON.parse(datos);
+        const { idPregunta = '', idVigilado, temporal = false, rutaRaiz = 'temp' } = JSON.parse(datos);
+
+        if(!idVigilado) {
+            return {
+                mensaje: `El campo idVigilado es obligatorio`,
+                error: 4
+            }
+        }
         const basePath = `./files`;
 
         const { ruta, fecha } = this.crearCarpetaSiNoExiste(basePath, rutaRaiz);
@@ -111,15 +118,21 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
 
     async obtenerArchivo(datos: string): Promise<any> {
         const { nombre, ruta } = JSON.parse(datos);
+        if (!nombre || !ruta) {
+            return {
+                mensaje: `Los parametros ruta y nombre son obligatorios`,
+                error: 5
+            }
+        }
         const basePath = `./files`;
 
         try {
             let archivo = fs.readFileSync(`${basePath}${ruta}/${nombre}`, 'base64');
-            return archivo
+            return {archivo}
         } catch (error) {
             return {
                 mensaje: `No se encontro el archivo solicitado`,
-                error: 1
+                error: 6
             }
 
         }
