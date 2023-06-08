@@ -3,55 +3,53 @@ import { RepositorioArchivos } from "../../../Dominio/Repositorios/RepositorioAr
 import { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser';
 import fs from "fs";
 import { TblArchivosTemporales } from "App/Infrestructura/datos/entidades/Archivo";
+import { Archivo } from "App/Dominio/Datos/Entidades/Archivo";
 
 export class RepositorioArchivosDb implements RepositorioArchivos {
 
     async crearArchivo(archivo: MultipartFileContract, datos: string): Promise<any> {
         const { idPregunta, idVigilado, temporal = false, rutaRaiz = 'temp' } = JSON.parse(datos);
         const basePath = `./files`;
-        console.log(temporal); //no guardar en la tabla temporal cuando es false
 
         const { ruta, fecha } = this.crearCarpetaSiNoExiste(basePath, rutaRaiz);
         const nombreAlmacenado = `${idPregunta}_${idVigilado}_${fecha}.${archivo.extname}`
         const nombreOriginalArchivo = archivo.clientName;
         let idTemporal;
 
+        if (temporal) {
 
-        const archivosTemporalesBd = await TblArchivosTemporales.query().where({ 'art_pregunta_id': idPregunta, 'art_usuario_id': idVigilado }).first()
-        if (!archivosTemporalesBd) {
-            const archivosTemporales = new TblArchivosTemporales()
-            archivosTemporales.preguntaId = idPregunta
-            archivosTemporales.usuarioId = idVigilado
-            archivosTemporales.nombreOriginal = nombreOriginalArchivo
-            archivosTemporales.nombreArchivo = nombreAlmacenado
-            archivosTemporales.rutaArchivo = ruta
-            idTemporal = (await archivosTemporales.save()).id
+            const archivosTemporalesBd = await TblArchivosTemporales.query().where({ 'art_pregunta_id': idPregunta, 'art_usuario_id': idVigilado }).first()
 
-            await archivo?.moveToDisk(`${ruta}`, {
-                name: nombreAlmacenado
-            })
-
-        } else {
-            try {
-                fs.unlinkSync(`${basePath}${archivosTemporalesBd.rutaArchivo}/${archivosTemporalesBd.nombreArchivo}`)                
-            } catch (err) {
-                console.error('Something wrong happened removing the file', err)
+            const data: Archivo = {
+                preguntaId: idPregunta,
+                usuarioId: idVigilado,
+                nombreOriginal: nombreOriginalArchivo,
+                nombreArchivo: nombreAlmacenado,
+                rutaArchivo: ruta
             }
 
-            archivosTemporalesBd.nombreOriginal = nombreOriginalArchivo
-            archivosTemporalesBd.nombreArchivo = nombreAlmacenado
-            archivosTemporalesBd.rutaArchivo = ruta
-            idTemporal = (await archivosTemporalesBd.save()).id
+            if (!archivosTemporalesBd) {
 
-            //actualizar el acrchivo
-            await archivo?.moveToDisk(`${ruta}`, {
-                name: nombreAlmacenado
-            })
+                const archivosTemporales = new TblArchivosTemporales()
+                archivosTemporales.establecerArchivo(data)
+                idTemporal = (await archivosTemporales.save()).id
 
+            } else {
+                try {
+                    fs.unlinkSync(`${basePath}${archivosTemporalesBd.rutaArchivo}/${archivosTemporalesBd.nombreArchivo}`)
+                } catch (err) {
+                    console.error('no se encontro el archivo a eliminar', err)
+                }
 
+                archivosTemporalesBd.establecerArchivoConID(data)
+                idTemporal = (await archivosTemporalesBd.save()).id
+
+            }
         }
 
-
+        await archivo?.moveToDisk(`${ruta}`, {
+            name: nombreAlmacenado
+        })
 
         return { nombreAlmacenado, nombreOriginalArchivo, ruta, idTemporal }
 
@@ -64,9 +62,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
     crearCarpetaSiNoExiste = (basePath, rutaRaiz) => {
 
         const fechaCargue = new Date();
-        const year = fechaCargue.getFullYear();
-        const month = fechaCargue.getMonth() + 1;
-        const fecha = this.format(fechaCargue);
+        const { year, month, fecha } = this.format(fechaCargue);
 
         const ruta = `/${rutaRaiz}/${year}/${month}`
         const raiz = `${basePath}/${rutaRaiz}`
@@ -92,20 +88,42 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
     format(inputDate: Date) {
         let date, month, year, hour, minute, second;
 
-        date = inputDate.getDate();
-        month = inputDate.getMonth() + 1;
         year = inputDate.getFullYear();
+        month = inputDate.getMonth() + 1;
+        date = inputDate.getDate();
         hour = inputDate.getHours();
         minute = inputDate.getMinutes();
         second = inputDate.getSeconds();
 
-        date = date.toString().padStart(2, '0');
         month = month.toString().padStart(2, '0');
+        date = date.toString().padStart(2, '0');
         hour = hour.toString().padStart(2, '0');
         minute = minute.toString().padStart(2, '0');
         second = second.toString().padStart(2, '0');
 
-        return `${year}${month}${date}${hour}${minute}${second}`;
+        return {
+            year,
+            month,
+            fecha: `${year}${month}${date}${hour}${minute}${second}`
+        }
+    }
+
+
+    async obtenerArchivo(datos: string): Promise<any> {
+        const { nombre, ruta } = JSON.parse(datos);
+        const basePath = `./files`;
+
+        try {
+            let archivo = fs.readFileSync(`${basePath}${ruta}/${nombre}`, 'base64');
+            return archivo
+        } catch (error) {
+            return {
+                mensaje: `No se encontro el archivo solicitado`,
+                error: 1
+            }
+
+        }
+
     }
 
 

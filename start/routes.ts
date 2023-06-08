@@ -7,5 +7,6 @@ Route.get('/', async () => {
 })
 
 Route.group(() => {
-  Route.post('/', controlador + '.guardar')
-}).prefix('api/v1/archivos')
+  Route.post('/', `${controlador}.guardar`)
+  Route.get('/', `${controlador}.obtener`)
+}).prefix('api/v1/archivos').middleware('auth')

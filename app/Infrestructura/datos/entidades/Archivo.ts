@@ -23,8 +23,17 @@ export class TblArchivosTemporales extends BaseModel {
   public actualizacion: DateTime
 
 
-  convertirAliado(archivo: Archivo) {
+  establecerArchivo(archivo: Archivo) {
     this.id = archivo.id
+    this.preguntaId = archivo.preguntaId
+    this.usuarioId = archivo.usuarioId
+    this.nombreArchivo = archivo.nombreArchivo
+    this.rutaArchivo = archivo.rutaArchivo
+    this.nombreOriginal = archivo.nombreOriginal
+    return this
+  }
+
+  establecerArchivoConID(archivo: Archivo) {
     this.preguntaId = archivo.preguntaId
     this.usuarioId = archivo.usuarioId
     this.nombreArchivo = archivo.nombreArchivo

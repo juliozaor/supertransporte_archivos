@@ -27,5 +27,12 @@ export default class ControladorArchivos {
 
   }
 
+  public async obtener ({ request, response }:HttpContextContract) {
+    const datos = request.all();
+   
+      return this.servicio.obtenerArchivo(JSON.stringify(datos))
+
+  }
+
 
 }

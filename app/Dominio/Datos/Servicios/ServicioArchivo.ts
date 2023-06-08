@@ -7,5 +7,9 @@ export class ServicioArchivos {
     crearArchivo(archivo: MultipartFileContract, datos:string) {
         return this.repositorio.crearArchivo(archivo, datos)
     }
+    obtenerArchivo(datos:string) {
+        return this.repositorio.obtenerArchivo(datos)
+    }
+
 
 }
