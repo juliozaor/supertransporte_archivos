@@ -9,9 +9,8 @@ export default class ControladorArchivos {
   }
   public async guardar ({ request, response }:HttpContextContract) {
     const datos = request.all();
-    const archivo = request.file('archivo', {
-        extnames: ['jpg', 'jpeg', 'png', 'pdf'],
-      })
+
+    const archivo = request.file('archivo')
       if (!archivo) {
         
         return response.status(400).send({
