@@ -150,6 +150,9 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         try {
             const absolutePath = path.resolve(`${relativePath}${ruta}/${nombre}`);
 
+            console.log(absolutePath);
+            
+
             let archivo = fs.readFileSync(`${absolutePath}`, 'base64');
             return { archivo }
         } catch (error) {
