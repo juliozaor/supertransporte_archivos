@@ -17,7 +17,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
                 error: 4
             }
         }
-          const basePath = `./files`;
+          const basePath = `../files`;
 
 /* 
 
@@ -145,7 +145,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
                 error: 5
             }
         }
-        const relativePath = './files';
+        const relativePath = '../files';
 
         try {
             const absolutePath = path.resolve(`${relativePath}${ruta}/${nombre}`);
