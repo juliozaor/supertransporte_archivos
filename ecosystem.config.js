@@ -2,11 +2,11 @@ module.exports = {
   deploy : {
     production : {
       user : 'root',
-      host : '157.230.190.144',
+      host : 'supertransporte_backend_archivos_prod',
       ref  : 'origin/main',
-      repo : 'https://github.com/jesidpolo04/backends_reportes_monteria.git',
-      path : '/var/tesis/backend',
-      'post-deploy': 'npm install && node ace build --production && cp .env build/.env && cd build && npm ci --production',
+      repo : 'https://github.com/juliozaor/supertransporte_archivos',
+      path : '/var/pesvsisi',
+      'post-deploy': 'npm install && npm run build && cp .env build/.env && cd build && npm ci --production',
     }
   }
 };
