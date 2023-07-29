@@ -30,8 +30,10 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
 
           
 
-
+        console.log("Entro 0");
            const { ruta, fecha } = await this.crearCarpetaSiNoExiste(basePath, rutaRaiz, idVigilado);
+           console.log("Entro 3");
+           console.log(ruta);
           const nombreAlmacenado = `${idPregunta}_${idVigilado}_${fecha}.${archivo.extname}`
           const nombreOriginalArchivo = archivo.clientName;
           let idTemporal;
@@ -69,6 +71,8 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
           }
           
           const absolutePathCreate = path.resolve(`${basePath}/${ruta}/${nombreAlmacenado}`)
+          console.log("Entro 3");
+           console.log(absolutePathCreate);
           
   
               fs.copyFile(archivo.tmpPath!, absolutePathCreate, (err) => {
@@ -89,6 +93,8 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
     }
 
     crearCarpetaSiNoExiste =  async (basePath, rutaRaiz, idVigilado) => {
+        console.log("Entro 1");
+        
 
         const fechaCargue = new Date();
         const { fecha } = this.format(fechaCargue);
@@ -100,7 +106,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         const rutaMes = `${rutaAnio}/${month}`;
  */
         if (!this.verificarCarpetaExiste(raiz)) {
-            console.log('No exite la carpeta');
+            console.log("Entro 2");
             
             fs.mkdirSync(raiz);
             /* fs.mkdirSync(rutaAnio);
