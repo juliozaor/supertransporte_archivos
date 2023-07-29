@@ -17,15 +17,16 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
                 error: 4
             }
         }
-          const basePath = `../files`;
+        // const basePath = `./archivos`; // local
+          const basePath = `../archivos`; // desplegado
 
 /* 
 
         
-        const basePath = `${Env.get('HOST')}:${Env.get('PORT')}/files`;
+        const basePath = `${Env.get('HOST')}:${Env.get('PORT')}/archivos`;
         console.log(basePath);
 
-        const relativePath = './files'; */
+        const relativePath = './archivos'; */
 
           
 
@@ -145,7 +146,8 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
                 error: 5
             }
         }
-        const relativePath = '../files';
+        // const basePath = `./archivos`; // local
+        const relativePath = '../archivos'; // desplegado
 
         try {
             const absolutePath = path.resolve(`${relativePath}${ruta}/${nombre}`);
