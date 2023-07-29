@@ -18,7 +18,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
             }
         }
          //const basePath = `./archivos`; // local
-          const basePath = `../archivos`; // desplegado
+          const basePath = `../../archivos`; // desplegado
          // const basePath = `/bodegapesv`; // desplegado
 /* 
 
