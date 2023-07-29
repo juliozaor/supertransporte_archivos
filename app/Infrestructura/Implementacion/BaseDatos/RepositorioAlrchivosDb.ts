@@ -31,7 +31,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
           
 
 
-           const { ruta, fecha } = this.crearCarpetaSiNoExiste(basePath, rutaRaiz);
+           const { ruta, fecha } = this.crearCarpetaSiNoExiste(basePath, rutaRaiz, idVigilado);
           const nombreAlmacenado = `${idPregunta}_${idVigilado}_${fecha}.${archivo.extname}`
           const nombreOriginalArchivo = archivo.clientName;
           let idTemporal;
@@ -88,29 +88,30 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         return fs.existsSync(rutaCarpeta);
     }
 
-    crearCarpetaSiNoExiste = (basePath, rutaRaiz) => {
+    crearCarpetaSiNoExiste = (basePath, rutaRaiz, idVigilado) => {
 
         const fechaCargue = new Date();
         const { year, month, fecha } = this.format(fechaCargue);
 
-        const ruta = `/${rutaRaiz}/${year}/${month}`
+      //  const ruta = `/${rutaRaiz}/${year}/${month}`
+        const ruta = `/${rutaRaiz}/${idVigilado}`
         const raiz = `${basePath}/${rutaRaiz}`
-        const rutaAnio = `${raiz}/${year}`;
+       /*  const rutaAnio = `${raiz}/${year}`;
         const rutaMes = `${rutaAnio}/${month}`;
-
+ */
         if (!this.verificarCarpetaExiste(raiz)) {
             fs.mkdirSync(raiz);
-            fs.mkdirSync(rutaAnio);
-            fs.mkdirSync(rutaMes);
+            /* fs.mkdirSync(rutaAnio);
+            fs.mkdirSync(rutaMes); */
         }
-        if (!this.verificarCarpetaExiste(rutaAnio)) {
+       /*  if (!this.verificarCarpetaExiste(rutaAnio)) {
             fs.mkdirSync(rutaAnio);
             fs.mkdirSync(rutaMes);
         }
         if (!this.verificarCarpetaExiste(rutaMes)) {
             fs.mkdirSync(rutaMes);
         }
-
+ */
         return { ruta, fecha };
     }
 
