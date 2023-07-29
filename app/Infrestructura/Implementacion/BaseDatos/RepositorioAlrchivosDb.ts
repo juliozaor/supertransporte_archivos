@@ -31,7 +31,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
           
 
 
-           const { ruta, fecha } = this.crearCarpetaSiNoExiste(basePath, rutaRaiz, idVigilado);
+           const { ruta, fecha } = await this.crearCarpetaSiNoExiste(basePath, rutaRaiz, idVigilado);
           const nombreAlmacenado = `${idPregunta}_${idVigilado}_${fecha}.${archivo.extname}`
           const nombreOriginalArchivo = archivo.clientName;
           let idTemporal;
@@ -88,7 +88,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         return fs.existsSync(rutaCarpeta);
     }
 
-    crearCarpetaSiNoExiste = (basePath, rutaRaiz, idVigilado) => {
+    crearCarpetaSiNoExiste =  async (basePath, rutaRaiz, idVigilado) => {
 
         const fechaCargue = new Date();
         const { fecha } = this.format(fechaCargue);
