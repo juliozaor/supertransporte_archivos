@@ -91,7 +91,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
     crearCarpetaSiNoExiste = (basePath, rutaRaiz, idVigilado) => {
 
         const fechaCargue = new Date();
-        const { year, month, fecha } = this.format(fechaCargue);
+        const { fecha } = this.format(fechaCargue);
 
       //  const ruta = `/${rutaRaiz}/${year}/${month}`
         const ruta = `/${rutaRaiz}/${idVigilado}`
@@ -100,6 +100,8 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         const rutaMes = `${rutaAnio}/${month}`;
  */
         if (!this.verificarCarpetaExiste(raiz)) {
+            console.log('No exite la carpeta');
+            
             fs.mkdirSync(raiz);
             /* fs.mkdirSync(rutaAnio);
             fs.mkdirSync(rutaMes); */
