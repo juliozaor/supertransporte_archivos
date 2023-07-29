@@ -17,8 +17,8 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
                 error: 4
             }
         }
-         const basePath = `./archivos`; // local
-          //const basePath = `../archivos`; // desplegado
+         //const basePath = `./archivos`; // local
+          const basePath = `../archivos`; // desplegado
          // const basePath = `/bodegapesv`; // desplegado
 /* 
 
@@ -146,8 +146,8 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
                 error: 5
             }
         }
-         const relativePath = `./archivos`; // local
-       // const relativePath = '../archivos'; // desplegado
+        // const relativePath = `./archivos`; // local
+       const relativePath = '../archivos'; // desplegado
        //const relativePath = `/bodegapesv`
 
         try {
