@@ -28,7 +28,7 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         source: "."  # Ruta a los archivos que deseas copiar al servidor
-        target: "/ruta/en/tu/servidor"  # Ruta de destino en el servidor
+        target: "/var/pesvsisi"  # Ruta de destino en el servidor
 
     - name: Ejecutar comandos en el servidor
       uses: appleboy/ssh-action@master
@@ -39,4 +39,4 @@ jobs:
         script: |
           # Comandos para reiniciar la aplicación en el servidor
           # Por ejemplo, si es una aplicación Node.js:
-          # pm2 restart mi_aplicacion
+          pm2 restart archivos
