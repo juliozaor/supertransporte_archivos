@@ -148,7 +148,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
             }
         }
         // const relativePath = `./archivos`; // local
-       const relativePath = '../archivos'; // desplegado
+       const relativePath = '../../archivos'; // desplegado
        //const relativePath = `/bodegapesv`
 
         try {
