@@ -91,16 +91,20 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         const { fecha } = this.format(fechaCargue);
 
         //  const ruta = `/${rutaRaiz}/${year}/${month}`
-        const ruta = `${rutaRaiz}/${idVigilado}`
-        const raiz = `${basePath}/${ruta}`
-        const absolutePathCreate = path.resolve(`${raiz}`)
+        const ruta = `${basePath}/${rutaRaiz}`
+        const raiz = `${ruta}/${idVigilado}`
+
+        const absolutePathCreateRuta = path.resolve(`${ruta}`)
+        const absolutePathCreateFull = path.resolve(`${raiz}`)
         /*  const rutaAnio = `${raiz}/${year}`;
          const rutaMes = `${rutaAnio}/${month}`;
   */
-        if (!this.verificarCarpetaExiste(absolutePathCreate)) {
-            fs.mkdirSync(absolutePathCreate);
-            /* fs.mkdirSync(rutaAnio);
-            fs.mkdirSync(rutaMes); */
+        if (!this.verificarCarpetaExiste(absolutePathCreateRuta)) {
+            fs.mkdirSync(absolutePathCreateRuta);
+            fs.mkdirSync(absolutePathCreateFull);
+        }
+        if (!this.verificarCarpetaExiste(absolutePathCreateFull)) {
+            fs.mkdirSync(absolutePathCreateFull);
         }
         /*  if (!this.verificarCarpetaExiste(rutaAnio)) {
              fs.mkdirSync(rutaAnio);
