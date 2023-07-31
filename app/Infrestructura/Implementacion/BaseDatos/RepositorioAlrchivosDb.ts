@@ -93,11 +93,12 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         //  const ruta = `/${rutaRaiz}/${year}/${month}`
         const ruta = `${rutaRaiz}/${idVigilado}`
         const raiz = `${basePath}/${ruta}`
+        const absolutePathCreate = path.resolve(`${raiz}`)
         /*  const rutaAnio = `${raiz}/${year}`;
          const rutaMes = `${rutaAnio}/${month}`;
   */
-        if (!this.verificarCarpetaExiste(raiz)) {
-            fs.mkdirSync(raiz);
+        if (!this.verificarCarpetaExiste(absolutePathCreate)) {
+            fs.mkdirSync(absolutePathCreate);
             /* fs.mkdirSync(rutaAnio);
             fs.mkdirSync(rutaMes); */
         }
@@ -150,9 +151,6 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
 
         try {
             const absolutePath = path.resolve(`${relativePath}${ruta}/${nombre}`);
-
-            console.log(absolutePath);
-
 
             let archivo = fs.readFileSync(`${absolutePath}`, 'base64');
             return { archivo }
