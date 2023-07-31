@@ -11,5 +11,11 @@ export class ServicioArchivos {
         return this.repositorio.obtenerArchivo(datos)
     }
 
+    verificarDirectorios() {
+        return this.repositorio.verificarDirectorios()
+    }
+
+    
+
 
 }

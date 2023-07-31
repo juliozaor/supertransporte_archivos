@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Database from '@ioc:Adonis/Lucid/Database';
 import { ServicioArchivos } from 'App/Dominio/Datos/Servicios/ServicioArchivo';
 import { RepositorioArchivosDb } from 'App/Infrestructura/Implementacion/BaseDatos/RepositorioAlrchivosDb';
 
@@ -33,6 +34,13 @@ export default class ControladorArchivos {
       return this.servicio.obtenerArchivo(JSON.stringify(datos))
 
   }
+
+  public async verificarDirectorios ({ request}:HttpContextContract) {
+    
+    return this.servicio.verificarDirectorios()
+    }
+
+
 
 
 }

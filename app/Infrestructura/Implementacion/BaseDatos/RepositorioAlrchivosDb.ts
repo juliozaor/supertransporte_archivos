@@ -4,6 +4,7 @@ import { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser';
 import fs from "fs";
 import { TblArchivosTemporales } from "App/Infrestructura/datos/entidades/Archivo";
 import { Archivo } from "App/Dominio/Datos/Entidades/Archivo";
+import Database from "@ioc:Adonis/Lucid/Database";
 const path = require('path');
 
 export class RepositorioArchivosDb implements RepositorioArchivos {
@@ -17,66 +18,66 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
                 error: 4
             }
         }
-         //const basePath = `./archivos`; // local
-          const basePath = `../../archivos`; // desplegado
-         // const basePath = `/bodegapesv`; // desplegado
-/* 
-
+        //const basePath = `./archivos`; // local
+        const basePath = `../../archivos`; // desplegado
+        // const basePath = `/bodegapesv`; // desplegado
+        /* 
         
-        const basePath = `${Env.get('HOST')}:${Env.get('PORT')}/archivos`;
-        console.log(basePath);
+                
+                const basePath = `${Env.get('HOST')}:${Env.get('PORT')}/archivos`;
+                console.log(basePath);
+        
+                const relativePath = './archivos'; */
 
-        const relativePath = './archivos'; */         
+        const { ruta, fecha } = await this.crearCarpetaSiNoExiste(basePath, rutaRaiz, idVigilado);
+        const nombreAlmacenado = `${idPregunta}_${idVigilado}_${fecha}.${archivo.extname}`
+        const nombreOriginalArchivo = archivo.clientName;
+        let idTemporal;
 
-           const { ruta, fecha } = await this.crearCarpetaSiNoExiste(basePath, rutaRaiz, idVigilado);
-          const nombreAlmacenado = `${idPregunta}_${idVigilado}_${fecha}.${archivo.extname}`
-          const nombreOriginalArchivo = archivo.clientName;
-          let idTemporal;
-  
-          if (temporal) {
-  
-              const archivosTemporalesBd = await TblArchivosTemporales.query().where({ 'art_pregunta_id': idPregunta, 'art_usuario_id': idVigilado }).first()
-  
-              const data: Archivo = {
-                  preguntaId: idPregunta,
-                  usuarioId: idVigilado,
-                  nombreOriginal: nombreOriginalArchivo,
-                  nombreArchivo: nombreAlmacenado,
-                  rutaArchivo: ruta
-              }
-  
-              if (!archivosTemporalesBd) {
-  
-                  const archivosTemporales = new TblArchivosTemporales()
-                  archivosTemporales.establecerArchivo(data)
-                  idTemporal = (await archivosTemporales.save()).id
-  
-              } else {
-                  try {
+        if (temporal) {
+
+            const archivosTemporalesBd = await TblArchivosTemporales.query().where({ 'art_pregunta_id': idPregunta, 'art_usuario_id': idVigilado }).first()
+
+            const data: Archivo = {
+                preguntaId: idPregunta,
+                usuarioId: idVigilado,
+                nombreOriginal: nombreOriginalArchivo,
+                nombreArchivo: nombreAlmacenado,
+                rutaArchivo: ruta
+            }
+
+            if (!archivosTemporalesBd) {
+
+                const archivosTemporales = new TblArchivosTemporales()
+                archivosTemporales.establecerArchivo(data)
+                idTemporal = (await archivosTemporales.save()).id
+
+            } else {
+                try {
                     const absolutePath = path.resolve(`${basePath}${archivosTemporalesBd.rutaArchivo}/${archivosTemporalesBd.nombreArchivo}`);
-                      fs.unlinkSync(`${absolutePath}`)
-                  } catch (err) {
-                      console.error('no se encontro el archivo a eliminar', err)
-                  }
-  
-                  archivosTemporalesBd.establecerArchivoConID(data)
-                  idTemporal = (await archivosTemporalesBd.save()).id
-  
-              }
-          }
-          
-          const absolutePathCreate = path.resolve(`${basePath}/${ruta}/${nombreAlmacenado}`)
-  
-              fs.copyFile(archivo.tmpPath!, absolutePathCreate, (err) => {
-                if (err) {
-                  console.error('Error al guardar el archivo:', err);
-                } else {
-                  console.log('Archivo guardado con éxito.');
-                  fs.unlinkSync(`${archivo.tmpPath!}`)
+                    fs.unlinkSync(`${absolutePath}`)
+                } catch (err) {
+                    console.error('no se encontro el archivo a eliminar', err)
                 }
-              });
-  
-          return { nombreAlmacenado, nombreOriginalArchivo, ruta, idTemporal } 
+
+                archivosTemporalesBd.establecerArchivoConID(data)
+                idTemporal = (await archivosTemporalesBd.save()).id
+
+            }
+        }
+
+        const absolutePathCreate = path.resolve(`${basePath}/${ruta}/${nombreAlmacenado}`)
+
+        fs.copyFile(archivo.tmpPath!, absolutePathCreate, (err) => {
+            if (err) {
+                console.error('Error al guardar el archivo:', err);
+            } else {
+                console.log('Archivo guardado con éxito.');
+                fs.unlinkSync(`${archivo.tmpPath!}`)
+            }
+        });
+
+        return { nombreAlmacenado, nombreOriginalArchivo, ruta, idTemporal }
 
     }
 
@@ -84,30 +85,30 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         return fs.existsSync(rutaCarpeta);
     }
 
-    crearCarpetaSiNoExiste =  async (basePath, rutaRaiz, idVigilado) => {
+    crearCarpetaSiNoExiste = async (basePath, rutaRaiz, idVigilado) => {
 
         const fechaCargue = new Date();
         const { fecha } = this.format(fechaCargue);
 
-      //  const ruta = `/${rutaRaiz}/${year}/${month}`
+        //  const ruta = `/${rutaRaiz}/${year}/${month}`
         const ruta = `/${rutaRaiz}/${idVigilado}`
         const raiz = `${basePath}/${ruta}`
-       /*  const rutaAnio = `${raiz}/${year}`;
-        const rutaMes = `${rutaAnio}/${month}`;
- */
-        if (!this.verificarCarpetaExiste(raiz)) {            
+        /*  const rutaAnio = `${raiz}/${year}`;
+         const rutaMes = `${rutaAnio}/${month}`;
+  */
+        if (!this.verificarCarpetaExiste(raiz)) {
             fs.mkdirSync(raiz);
             /* fs.mkdirSync(rutaAnio);
             fs.mkdirSync(rutaMes); */
         }
-       /*  if (!this.verificarCarpetaExiste(rutaAnio)) {
-            fs.mkdirSync(rutaAnio);
-            fs.mkdirSync(rutaMes);
-        }
-        if (!this.verificarCarpetaExiste(rutaMes)) {
-            fs.mkdirSync(rutaMes);
-        }
- */
+        /*  if (!this.verificarCarpetaExiste(rutaAnio)) {
+             fs.mkdirSync(rutaAnio);
+             fs.mkdirSync(rutaMes);
+         }
+         if (!this.verificarCarpetaExiste(rutaMes)) {
+             fs.mkdirSync(rutaMes);
+         }
+  */
         return { ruta, fecha };
     }
 
@@ -144,14 +145,14 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
             }
         }
         // const relativePath = `./archivos`; // local
-       const relativePath = '../../archivos'; // desplegado
-       //const relativePath = `/bodegapesv`
+        const relativePath = '../../archivos'; // desplegado
+        //const relativePath = `/bodegapesv`
 
         try {
             const absolutePath = path.resolve(`${relativePath}${ruta}/${nombre}`);
 
             console.log(absolutePath);
-            
+
 
             let archivo = fs.readFileSync(`${absolutePath}`, 'base64');
             return { archivo }
@@ -164,6 +165,26 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         }
 
     }
+
+    verificarDirectorios = async () => {
+
+        const sql = 'select distinct usuario_actualizacion from respuestas where ruta is not null '
+        const consulta = await Database.rawQuery(sql)
+
+        const basePath = `../../archivos`;
+        let carpetas = new Array();
+        consulta.rows.forEach(element => {        
+
+              const raiz = path.resolve(`${basePath}/pesv/${element.usuario_actualizacion}`)
+              console.log(raiz);
+              
+            if (!this.verificarCarpetaExiste(raiz)) {
+                carpetas.push(element.usuario_actualizacion)
+            }
+        });
+        return carpetas;
+    }
+
 
 
 
