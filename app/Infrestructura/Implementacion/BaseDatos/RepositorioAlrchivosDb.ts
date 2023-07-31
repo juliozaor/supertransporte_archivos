@@ -91,7 +91,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         const { fecha } = this.format(fechaCargue);
 
         //  const ruta = `/${rutaRaiz}/${year}/${month}`
-        const ruta = `/${rutaRaiz}/${idVigilado}`
+        const ruta = `${rutaRaiz}/${idVigilado}`
         const raiz = `${basePath}/${ruta}`
         /*  const rutaAnio = `${raiz}/${year}`;
          const rutaMes = `${rutaAnio}/${month}`;
