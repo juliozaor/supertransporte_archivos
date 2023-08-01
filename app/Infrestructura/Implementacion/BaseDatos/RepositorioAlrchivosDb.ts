@@ -66,7 +66,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
             }
         }
 
-        const absolutePathCreate = path.resolve(`${basePath}/${ruta}/${nombreAlmacenado}`)
+        const absolutePathCreate = path.resolve(`${basePath}${ruta}/${nombreAlmacenado}`)
 
         fs.copyFile(archivo.tmpPath!, absolutePathCreate, (err) => {
             if (err) {
@@ -90,7 +90,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         const fechaCargue = new Date();
         const { fecha } = this.format(fechaCargue);
 
-     const ruta = `${rutaRaiz}/${idVigilado}`
+     const ruta = `/${rutaRaiz}/${idVigilado}`
         const rutaSistema = `${basePath}/${rutaRaiz}`
         const raiz = `${rutaSistema}/${idVigilado}`
 
