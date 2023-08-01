@@ -90,9 +90,9 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         const fechaCargue = new Date();
         const { fecha } = this.format(fechaCargue);
 
-     const ruta = `/${rutaRaiz}/${idVigilado}`
+     const ruta = `${rutaRaiz}/${idVigilado}`
         const rutaSistema = `${basePath}/${rutaRaiz}`
-        const raiz = `${ruta}/${idVigilado}`
+        const raiz = `${rutaSistema}/${idVigilado}`
 
         const absolutePathCreateRuta = path.resolve(`${rutaSistema}`)
         const absolutePathCreateFull = path.resolve(`${raiz}`)
