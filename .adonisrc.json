@@ -4,7 +4,8 @@
     "./commands",
     "@adonisjs/core/build/commands/index.js",
     "@adonisjs/repl/build/commands",
-    "@adonisjs/lucid/build/commands"
+    "@adonisjs/lucid/build/commands",
+    "@adonisjs/mail/build/commands"
   ],
   "exceptionHandlerNamespace": "App/Exceptions/Handler",
   "aliases": {
@@ -13,6 +14,9 @@
     "Database": "database",
     "Contracts": "contracts"
   },
+  "directories":{
+    "views": "./"
+  },
   "preloads": [
     "./start/routes",
     "./start/kernel"
@@ -20,7 +24,9 @@
   "providers": [
     "./providers/AppProvider",
     "@adonisjs/core",
-    "@adonisjs/lucid"
+    "@adonisjs/lucid",
+    "@adonisjs/mail",
+    "@adonisjs/view"
   ],
   "aceProviders": [
     "@adonisjs/repl"
@@ -38,5 +44,19 @@
   },
   "testProviders": [
     "@japa/preset-adonis/TestsProvider"
-  ]
+  ],
+  "metaFiles": [
+    {
+      "pattern": "**/*.edge",
+      "reloadServer": true
+    }
+  ], 
+  "build": {
+    "copy": [
+      {
+        "from": "./app/Dominio/Email/Templates",
+        "to": "./build/app/Dominio/Email/Templates"
+      }
+    ]
+  }
 }
