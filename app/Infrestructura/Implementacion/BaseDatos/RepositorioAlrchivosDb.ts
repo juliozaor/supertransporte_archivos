@@ -199,7 +199,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         const basePath = `../../archivos`;
       // const basePath = `archivos`;
         let carpetas = new Array();
-       
+       let ids = '';
         
         consulta.rows.forEach(element => {        
 
@@ -214,9 +214,10 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
                     idPregunta: element.id_pregunta,
                     pregunta: element.pregunta
                 })
+                ids += `${element.id_respuesta},`
             }
        });
-        return carpetas;
+        return {faltantes:carpetas,ids};
     }
 
 
