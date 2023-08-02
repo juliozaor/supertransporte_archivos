@@ -189,7 +189,11 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
 
     verificarArchivos = async () => {
 
-        const sql = 'select documento, usuario_actualizacion from respuestas where ruta is not null and documento is not null'
+     //   const sql = 'select documento, usuario_actualizacion from respuestas where ruta is not null and documento is not null'
+     const sql = `select re.id_respuesta, re.documento, re.usuario_actualizacion, us.usn_nombre, p.id_pregunta, p.pregunta  
+     from respuestas re, tbl_usuarios us, preguntas p  
+     where re.ruta is not null and re.documento is not null  and re.usuario_actualizacion = us.usn_usuario and p.id_pregunta = re.id_pregunta 
+     `
         const consulta = await Database.rawQuery(sql)
 
         const basePath = `../../archivos`;
@@ -203,8 +207,12 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
                           
             if (!this.verificarCarpetaExiste(raiz)) {
                 carpetas.push({
-                    carpeta:element.usuario_actualizacion,
-                    archivo: element.documento
+                    idRespuesta:element.id_respuesta,
+                    documento: element.documento,
+                    usuario:element.usuario_actualizacion,
+                    vigilado:element.usn_nombre,
+                    idPregunta: element.id_pregunta,
+                    pregunta: element.pregunta
                 })
             }
        });
