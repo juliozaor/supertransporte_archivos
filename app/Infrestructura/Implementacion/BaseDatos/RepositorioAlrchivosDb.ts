@@ -187,6 +187,30 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         return carpetas;
     }
 
+    verificarArchivos = async () => {
+
+        const sql = 'select documento, usuario_actualizacion from respuestas where ruta is not null and documento is not null'
+        const consulta = await Database.rawQuery(sql)
+
+        const basePath = `../../archivos`;
+      // const basePath = `archivos`;
+        let carpetas = new Array();
+       
+        
+        consulta.rows.forEach(element => {        
+
+              const raiz = path.resolve(`${basePath}/pesv/${element.usuario_actualizacion}/${element.documento}`)
+                          
+            if (!this.verificarCarpetaExiste(raiz)) {
+                carpetas.push({
+                    carpeta:element.usuario_actualizacion,
+                    archivo: element.documento
+                })
+            }
+       });
+        return carpetas;
+    }
+
 
 
 

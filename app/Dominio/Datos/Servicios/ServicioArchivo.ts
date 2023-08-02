@@ -15,6 +15,10 @@ export class ServicioArchivos {
         return this.repositorio.verificarDirectorios()
     }
 
+    verificarArchivos() {
+        return this.repositorio.verificarArchivos()
+    }
+
     
 
 

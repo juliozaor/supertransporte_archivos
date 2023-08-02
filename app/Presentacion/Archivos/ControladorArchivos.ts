@@ -39,6 +39,11 @@ export default class ControladorArchivos {
     return this.servicio.verificarDirectorios()
     }
 
+    public async verificarArchivos () {
+    
+      return this.servicio.verificarArchivos()
+      }
+
 
 
 

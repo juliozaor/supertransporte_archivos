@@ -6,6 +6,7 @@ Route.get('/', async () => {
   return 'Bienvenido al registro de archivos'
 })
 Route.get('/directorios', `${controlador}.verificarDirectorios`)
+Route.get('/archivos', `${controlador}.verificarArchivos`)
 
 Route.group(() => {
   Route.post('/', `${controlador}.guardar`)
