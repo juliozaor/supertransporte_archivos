@@ -12,6 +12,8 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
     async crearArchivo(archivo: MultipartFileContract, datos: string): Promise<any> {
         const { idPregunta = '', idVigilado, temporal = false, rutaRaiz = 'temp' } = JSON.parse(datos);
 
+        console.log(archivo);
+        
         if (!idVigilado) {
             return {
                 mensaje: `El campo idVigilado es obligatorio`,
