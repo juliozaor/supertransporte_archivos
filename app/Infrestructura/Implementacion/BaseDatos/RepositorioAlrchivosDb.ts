@@ -74,11 +74,7 @@ if(archivo.tmpPath){
     console.log("tamaño", archivo.size);
     
     setTimeout(async() => {
-        console.log("Delayed for 1 second.");
         try {
-
-            console.log("Ruta temporal",archivo.tmpPath);                
-              
           await copyFile(archivo.tmpPath!, absolutePathCreate, constants.COPYFILE_EXCL);
           console.log('Archivo guardado con éxito.' );
           readFile(`${absolutePathCreate}`).then( p =>{
