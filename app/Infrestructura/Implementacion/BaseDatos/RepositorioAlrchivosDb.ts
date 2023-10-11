@@ -12,7 +12,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
     async crearArchivo(archivo: MultipartFileContract, datos: string): Promise<any> {
         const { idPregunta = '', idVigilado, temporal = false, rutaRaiz = 'temp' } = JSON.parse(datos);
 
-     //   console.log(archivo);
+        
         
         if (!idVigilado) {
             return {
@@ -69,22 +69,19 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         }
 
         const absolutePathCreate = path.resolve(`${basePath}${ruta}/${nombreAlmacenado}`)
-try {
-    console.log({'ruta temporal':archivo.tmpPath});
-    
-    fs.copyFile(archivo.tmpPath!, absolutePathCreate, (err) => {
-        if (err) {
-            console.error('Error al guardar el archivo:', err);
-        } else {
-            console.log('Archivo guardado con éxito.');
-            fs.unlinkSync(`${archivo.tmpPath!}`)
-        }
-    });
-} catch (error) {
-    console.log({'error-archivo':error});
-    
-}
-
+if(archivo.tmpPath){
+        fs.copyFile(archivo.tmpPath, absolutePathCreate, (err) => {
+            if (err) {
+                console.error('Error al guardar el archivo:', err);
+            } else {
+                console.log('Archivo guardado con éxito.');
+             //   fs.unlinkSync(`${archivo.tmpPath!}`)
+            }
+        });
+    }else{
+        console.log("El archivo no existe");
+        
+    }
         return { nombreAlmacenado, nombreOriginalArchivo, ruta, idTemporal }
 
     }
@@ -158,7 +155,7 @@ try {
             }
         }
         // const relativePath = `./archivos`; // local
-        const relativePath = '../../archivos'; // desplegado
+        const relativePath = '../archivos'; // desplegado
         //const relativePath = `/bodegapesv`
 
         try {
