@@ -70,7 +70,9 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
 
         const absolutePathCreate = path.resolve(`${basePath}${ruta}/${nombreAlmacenado}`)
 if(archivo.tmpPath){
-        fs.copyFile(archivo.tmpPath, absolutePathCreate, (err) => {
+    console.log("tamaño", archivo.size);
+    
+        fs.copyFile(archivo.tmpPath, absolutePathCreate,  (err) => {
             if (err) {
                 console.error('Error al guardar el archivo:', err);
             } else {
