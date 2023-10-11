@@ -22,7 +22,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
             }
         }
         //const basePath = `./archivos`; // local
-        const basePath = `../archivos`; // desplegado
+        const basePath = `../../archivos`; // desplegado
         // const basePath = `/bodegapesv`; // desplegado
         /* 
         
@@ -186,7 +186,7 @@ if(archivo.tmpPath){
             }
         }
         // const relativePath = `./archivos`; // local
-        const relativePath = '../archivos'; // desplegado
+        const relativePath = '../../archivos'; // desplegado
         //const relativePath = `/bodegapesv`
 
         try {
@@ -209,7 +209,7 @@ if(archivo.tmpPath){
         const sql = 'select distinct usuario_actualizacion from respuestas where ruta is not null '
         const consulta = await Database.rawQuery(sql)
 
-        const basePath = `../archivos`;
+        const basePath = `../../archivos`;
         let carpetas = new Array();
         consulta.rows.forEach(element => {        
 
@@ -232,7 +232,7 @@ if(archivo.tmpPath){
      `
         const consulta = await Database.rawQuery(sql)
 
-        const basePath = `../archivos`;
+        const basePath = `../../archivos`;
       // const basePath = `archivos`;
         let carpetas = new Array();
        let ids = '';
