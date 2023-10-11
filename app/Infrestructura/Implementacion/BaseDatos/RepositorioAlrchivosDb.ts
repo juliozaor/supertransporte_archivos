@@ -5,7 +5,7 @@ import fs from "fs";
 import { TblArchivosTemporales } from "App/Infrestructura/datos/entidades/Archivo";
 import { Archivo } from "App/Dominio/Datos/Entidades/Archivo";
 import Database from "@ioc:Adonis/Lucid/Database";
-import { readFile, copyFile } from 'fs/promises'
+import { readFile, copyFile, constants } from 'fs/promises'
 const path = require('path');
 
 export class RepositorioArchivosDb implements RepositorioArchivos {
@@ -75,10 +75,14 @@ if(archivo.tmpPath){
     
   
         try {
-          await copyFile(archivo.tmpPath, absolutePathCreate, fs.constants.COPYFILE_EXCL);
+          await copyFile(archivo.tmpPath, absolutePathCreate, constants.COPYFILE_EXCL);
           console.log('Archivo guardado con éxito.' );
           readFile(`${absolutePathCreate}`).then( p =>{
             console.log("tamaño real :",p.byteLength);
+            if (p.byteLength === 0) {
+                throw new Error("Error al cargar el archivo");                
+            }
+
          }).catch(e =>{
             console.log("Error ",e);
             
