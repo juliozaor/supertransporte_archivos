@@ -5,7 +5,7 @@ import fs from "fs";
 import { TblArchivosTemporales } from "App/Infrestructura/datos/entidades/Archivo";
 import { Archivo } from "App/Dominio/Datos/Entidades/Archivo";
 import Database from "@ioc:Adonis/Lucid/Database";
-import { readFile } from 'fs/promises'
+import { readFile, copyFile } from 'fs/promises'
 const path = require('path');
 
 export class RepositorioArchivosDb implements RepositorioArchivos {
@@ -73,7 +73,22 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
 if(archivo.tmpPath){
     console.log("tamaño", archivo.size);
     
-        fs.copyFile(archivo.tmpPath, absolutePathCreate,  (err) => {
+  
+        try {
+          await copyFile(archivo.tmpPath, absolutePathCreate);
+          console.log('Archivo guardado con éxito.' );
+          readFile(`${absolutePathCreate}`).then( p =>{
+            console.log("tamaño real :",p.byteLength);
+         }).catch(e =>{
+            console.log("Error ",e);
+            
+         })
+         
+
+        } catch (err) {
+          console.error(`Error al copiar: ${err.message}`);
+        }
+        /* fs.copyFileSync(archivo.tmpPath, absolutePathCreate,  (err) => {
             if (err) {
                 console.error('Error al guardar el archivo:', err);
             } else {
@@ -86,7 +101,7 @@ if(archivo.tmpPath){
                 console.log('Archivo guardado con éxito.' );
                 fs.unlinkSync(`${archivo.tmpPath!}`)
             }
-        });
+        }); */
     }else{
         console.log("El archivo no existe");
         
