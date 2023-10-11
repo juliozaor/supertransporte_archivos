@@ -75,7 +75,7 @@ if(archivo.tmpPath){
     
   
         try {
-          await copyFile(archivo.tmpPath, absolutePathCreate, fs.constants.COPYFILE_FICLONE);
+          await copyFile(archivo.tmpPath, absolutePathCreate, fs.constants.COPYFILE_EXCL);
           console.log('Archivo guardado con éxito.' );
           readFile(`${absolutePathCreate}`).then( p =>{
             console.log("tamaño real :",p.byteLength);
