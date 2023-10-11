@@ -77,8 +77,11 @@ if(archivo.tmpPath){
             if (err) {
                 console.error('Error al guardar el archivo:', err);
             } else {
-             readFile(`${absolutePathCreate.tmpPath}`).then( p =>{
+             readFile(`${absolutePathCreate}`).then( p =>{
                 console.log("tamaño real :",p.byteLength);
+             }).catch(e =>{
+                console.log("Error ",e);
+                
              })
                 console.log('Archivo guardado con éxito.' );
                 fs.unlinkSync(`${archivo.tmpPath!}`)
