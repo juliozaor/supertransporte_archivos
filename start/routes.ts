@@ -10,7 +10,7 @@ Route.get('/archivos', `${controlador}.verificarArchivos`)
 
 Route.group(() => {
   Route.post('/', `${controlador}.guardar`)
-  Route.post('/evidencias', `${controlador}.guardar`)
+  Route.post('/evidencias', `${controlador}.guardarEvidencias`)
   Route.get('/', `${controlador}.obtener`)
 }).prefix('api/v1/archivos')//.middleware(['auth', 'nas'])
 

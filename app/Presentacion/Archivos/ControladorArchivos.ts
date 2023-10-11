@@ -4,10 +4,10 @@ import { RepositorioArchivosDb } from 'App/Infrestructura/Implementacion/BaseDat
 
 export default class ControladorArchivos {
   private servicio: ServicioArchivos
-  constructor () {
+  constructor() {
     this.servicio = new ServicioArchivos(new RepositorioArchivosDb)
   }
-  public async guardar ({ request, response }:HttpContextContract) {
+  public async guardar({ request, response }: HttpContextContract) {
     const datos = request.all();
 
     /* let archivo;
@@ -18,68 +18,75 @@ export default class ControladorArchivos {
     }else{
       archivo = request.file('archivo')
     } */
-   const archivo = request.file('archivo')
-      if (!archivo) {
-        
-        return response.status(400).send({
-          mensaje:'No se encontro el archivo',
-          error: 2
-        })
-      }
+    const archivo = request.file('archivo')
+    if (!archivo) {
 
-      if (!archivo.isValid) {
-        return response.status(400).send({mensaje:'Formato incorrecto para el archivo', error: 3})
-      }
-
-      return this.servicio.crearArchivo(archivo, JSON.stringify(datos))
-
-  }
-
-  public async obtener ({ request}:HttpContextContract) {
-    const datos = request.all();
-   
-      return this.servicio.obtenerArchivo(JSON.stringify(datos))
-
-  }
-
-  public async verificarDirectorios () {
-    
-    return this.servicio.verificarDirectorios()
+      return response.status(400).send({
+        mensaje: 'No se encontro el archivo',
+        error: 2
+      })
     }
 
-    public async verificarArchivos () {
-    
-      return this.servicio.verificarArchivos()
-      }
+    if (!archivo.isValid) {
+      return response.status(400).send({ mensaje: 'Formato incorrecto para el archivo', error: 3 })
+    }
 
-      public async guardarEvidencias ({ request, response }:HttpContextContract) {
-        const datos = request.all();
-       
-        if(!datos.extension){
-          return "falta la extension"
-        }
-        const extension = datos.extension.replace(/\./gm, '').replace(/ /g,'');
-        const extensiones = extension.split(',');
+    return this.servicio.crearArchivo(archivo, JSON.stringify(datos))
 
-        const archivo = request.file('archivo', {
-          extnames: extensiones,
-        })
+  }
 
-          if (!archivo) {
-            
-            return response.status(400).send({
-              mensaje:'No se encontro el archivo',
-              error: 2
-            })
-          }
-    
-          if (!archivo.isValid) {
-            return response.status(400).send({mensaje:'Formato incorrecto para el archivo', error: 3})
-          }
-    
-          return this.servicio.crearArchivo(archivo, JSON.stringify(datos))
-    
-      }
+  public async obtener({ request }: HttpContextContract) {
+    const datos = request.all();
+
+    return this.servicio.obtenerArchivo(JSON.stringify(datos))
+
+  }
+
+  public async verificarDirectorios() {
+
+    return this.servicio.verificarDirectorios()
+  }
+
+  public async verificarArchivos() {
+
+    return this.servicio.verificarArchivos()
+  }
+
+  public async guardarEvidencias({ request, response }: HttpContextContract) {
+    const datos = request.all();
+
+    if (!datos.extension) {
+      return "falta la extension"
+    }
+    const extension = datos.extension.replace(/\./gm, '').replace(/ /g, '');
+    const extensiones = extension.split(',');
+
+    const archivo = request.file('archivo', {
+      extnames: extensiones,
+    })
+
+    if (!archivo) {
+
+      return response.status(400).send({
+        mensaje: 'No se encontro el archivo',
+        error: 2
+      })
+    }
+
+    if (!archivo.isValid) {
+      return response.status(400).send({ mensaje: 'Formato incorrecto para el archivo', error: 3 })
+    }
+try {
+  return this.servicio.crearArchivo(archivo, JSON.stringify(datos))
+  
+} catch (error) {
+  return response.status(400).send({
+    mensaje: 'Error al cargar el archivo, intente nuevamente',
+    error: 2
+  })
+}
+
+  }
 
 
 
