@@ -21,7 +21,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
             }
         }
         //const basePath = `./archivos`; // local
-        const basePath = `../../archivos`; // desplegado
+        const basePath = `../archivos`; // desplegado
         // const basePath = `/bodegapesv`; // desplegado
         /* 
         
@@ -175,7 +175,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         const sql = 'select distinct usuario_actualizacion from respuestas where ruta is not null '
         const consulta = await Database.rawQuery(sql)
 
-        const basePath = `../../archivos`;
+        const basePath = `../archivos`;
         let carpetas = new Array();
         consulta.rows.forEach(element => {        
 
@@ -198,7 +198,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
      `
         const consulta = await Database.rawQuery(sql)
 
-        const basePath = `../../archivos`;
+        const basePath = `../archivos`;
       // const basePath = `archivos`;
         let carpetas = new Array();
        let ids = '';
