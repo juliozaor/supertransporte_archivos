@@ -76,15 +76,11 @@ export default class ControladorArchivos {
     if (!archivo.isValid) {
       return response.status(400).send({ mensaje: 'Formato incorrecto para el archivo', error: 3 })
     }
-try {
+    
+    
   return this.servicio.crearArchivo(archivo, JSON.stringify(datos))
   
-} catch (error) {
-  return response.status(400).send({
-    mensaje: 'Error al cargar el archivo, intente nuevamente',
-    error: 2
-  })
-}
+
 
   }
 
