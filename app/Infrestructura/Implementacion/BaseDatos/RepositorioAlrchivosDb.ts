@@ -11,7 +11,7 @@ const path = require('path');
 export class RepositorioArchivosDb implements RepositorioArchivos {
 
     async crearArchivo(archivo: MultipartFileContract, datos: string): Promise<any> {
-        const { idPregunta = '', idVigilado, temporal = false, rutaRaiz = 'temp' } = JSON.parse(datos);
+        const { idPregunta = 'e', idVigilado, temporal = false, rutaRaiz = 'temp' } = JSON.parse(datos);
 
         
         
