@@ -73,16 +73,13 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
 if(archivo.tmpPath){
     console.log("tamaño", archivo.size);
     
-  
+    setTimeout(async() => {
+        console.log("Delayed for 1 second.");
         try {
 
-            console.log("Ruta temporal",archivo.tmpPath);
-
-            setTimeout(() => {
-                console.log("Delayed for 1 second.");
-              }, 5000);
-            
-          await copyFile(archivo.tmpPath, absolutePathCreate, constants.COPYFILE_EXCL);
+            console.log("Ruta temporal",archivo.tmpPath);                
+              
+          await copyFile(archivo.tmpPath!, absolutePathCreate, constants.COPYFILE_EXCL);
           console.log('Archivo guardado con éxito.' );
           readFile(`${absolutePathCreate}`).then( p =>{
             console.log("tamaño real :",p.byteLength);
@@ -99,6 +96,9 @@ if(archivo.tmpPath){
         } catch (err) {
           console.error(`Error al copiar: ${err.message}`);
         }
+
+    }, 5000);
+            
         /* fs.copyFileSync(archivo.tmpPath, absolutePathCreate,  (err) => {
             if (err) {
                 console.error('Error al guardar el archivo:', err);
