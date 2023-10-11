@@ -75,7 +75,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
                 console.error('Error al guardar el archivo:', err);
             } else {
                 console.log('Archivo guardado con éxito.');
-                fs.unlinkSync(`${archivo.tmpPath!}`)
+               // fs.unlinkSync(`${archivo.tmpPath!}`)
             }
         });
 
