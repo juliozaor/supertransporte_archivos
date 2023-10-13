@@ -6,6 +6,7 @@ import { TblArchivosTemporales } from "App/Infrestructura/datos/entidades/Archiv
 import { Archivo } from "App/Dominio/Datos/Entidades/Archivo";
 import Database from "@ioc:Adonis/Lucid/Database";
 import { readFile, copyFile, constants } from 'fs/promises'
+import Env from '@ioc:Adonis/Core/Env';
 const path = require('path');
 
 export class RepositorioArchivosDb implements RepositorioArchivos {
@@ -22,7 +23,7 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
             }
         }
         //const basePath = `./archivos`; // local
-        const basePath = `../../archivos`; // desplegado
+        const basePath = Env.get('BASEPATH'); // desplegado
         // const basePath = `/bodegapesv`; // desplegado
         /* 
         
@@ -72,8 +73,8 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
         const absolutePathCreate = path.resolve(`${basePath}${ruta}/${nombreAlmacenado}`)
 if(archivo.tmpPath){
     console.log("tamaño", archivo.size);
-    
-    setTimeout(async() => {
+    await this.copyFileAsync(archivo.tmpPath, absolutePathCreate);
+   /*  setTimeout(async() => {
         try {
           await copyFile(archivo.tmpPath!, absolutePathCreate, constants.COPYFILE_EXCL);
           console.log('Archivo guardado con éxito.' );
@@ -93,7 +94,7 @@ if(archivo.tmpPath){
           console.error(`Error al copiar: ${err.message}`);
         }
 
-    }, 5000);
+    }, 5000); */
             
         /* fs.copyFileSync(archivo.tmpPath, absolutePathCreate,  (err) => {
             if (err) {
@@ -109,6 +110,10 @@ if(archivo.tmpPath){
                 fs.unlinkSync(`${archivo.tmpPath!}`)
             }
         }); */
+
+
+
+
     }else{
         console.log("El archivo no existe");
         
@@ -116,6 +121,25 @@ if(archivo.tmpPath){
         return { nombreAlmacenado, nombreOriginalArchivo, ruta, idTemporal }
 
     }
+
+    copyFileAsync = async (src, dest) => {
+        console.log("entro 1");
+        
+        return new Promise((resolve, reject) => {
+          const readStream = fs.createReadStream(src);
+          const writeStream = fs.createWriteStream(dest);
+      
+          readStream.on('error', reject);
+          writeStream.on('error', reject);
+      
+          writeStream.on('finish', () => {
+            console.log("entro 2");
+            resolve();
+          });
+      
+          readStream.pipe(writeStream);
+        });
+      };
 
     verificarCarpetaExiste = (rutaCarpeta) => {
         return fs.existsSync(rutaCarpeta);
@@ -209,7 +233,7 @@ if(archivo.tmpPath){
         const sql = 'select distinct usuario_actualizacion from respuestas where ruta is not null '
         const consulta = await Database.rawQuery(sql)
 
-        const basePath = `../../archivos`;
+        const basePath = Env.get('BASEPATH');
         let carpetas = new Array();
         consulta.rows.forEach(element => {        
 
@@ -232,7 +256,7 @@ if(archivo.tmpPath){
      `
         const consulta = await Database.rawQuery(sql)
 
-        const basePath = `../../archivos`;
+        const basePath = Env.get('BASEPATH');
       // const basePath = `archivos`;
         let carpetas = new Array();
        let ids = '';

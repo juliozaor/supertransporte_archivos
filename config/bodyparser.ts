@@ -51,7 +51,7 @@ const bodyParserConfig: BodyParserConfig = {
   */
   form: {
     encoding: 'utf-8',
-    limit: '1mb',
+    limit: '60mb',
     queryString: {},
 
     /*
@@ -192,7 +192,7 @@ const bodyParserConfig: BodyParserConfig = {
     | and fields data.
     |
     */
-    limit: '20mb',
+    limit: '60mb',
 
     /*
     |--------------------------------------------------------------------------
