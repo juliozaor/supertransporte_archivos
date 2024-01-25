@@ -5,7 +5,6 @@ import fs from "fs";
 import { TblArchivosTemporales } from "App/Infrestructura/datos/entidades/Archivo";
 import { Archivo } from "App/Dominio/Datos/Entidades/Archivo";
 import Database from "@ioc:Adonis/Lucid/Database";
-import { readFile, copyFile, constants } from 'fs/promises'
 import Env from '@ioc:Adonis/Core/Env';
 const path = require('path');
 

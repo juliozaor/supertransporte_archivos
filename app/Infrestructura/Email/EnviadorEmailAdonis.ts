@@ -34,6 +34,8 @@ export class EnviadorEmailAdonis implements EnviadorEmail {
   }
 
   enviarEmail (asunto:string, texto: string, destinatarios: string[], etiquetas?: string[] | undefined): void {
+    console.log(etiquetas);
+    
     Mail.send(mensaje => {
       mensaje
         .subject(asunto)

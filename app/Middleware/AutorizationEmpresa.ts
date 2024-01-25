@@ -1,10 +1,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Env from '@ioc:Adonis/Core/Env';
-import axios from "axios";
 import ErroresEmpresa from 'App/Exceptions/ErroresEmpresa';
 import TokenValidoException from 'App/Exceptions/TokenValidoException';
+import axios from 'axios';
 export default class AutorizationEmpresa {
-  public async handle({request, response}: HttpContextContract, next: () => Promise<void>) {
+  public async handle({request}: HttpContextContract, next: () => Promise<void>) {
     const {idVigilado, token} = request.all();
     const header = request.header('Authorization')
     if(!header){
@@ -27,6 +27,8 @@ export default class AutorizationEmpresa {
       return resp.data.acceso
       
     }).catch(err =>{
+      console.log(err);
+      
       throw new ErroresEmpresa('No tiene autorización, verifique el token de autorización.',401)
     })
 
