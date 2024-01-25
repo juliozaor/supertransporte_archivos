@@ -14,3 +14,9 @@ Route.group(() => {
   Route.get('/', `${controlador}.obtener`)
 }).prefix('api/v1/archivos')//.middleware(['auth', 'nas'])
 
+Route.group(() => {
+  Route.post('/', `${controlador}.guardar`)
+  Route.post('/evidencias', `${controlador}.guardarEvidencias`)
+  Route.get('/', `${controlador}.obtener`)
+}).prefix('api/v1/guardar-archivo').middleware('authEmpresa')
+
