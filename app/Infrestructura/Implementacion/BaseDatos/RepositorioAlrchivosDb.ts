@@ -133,7 +133,7 @@ if(archivo.tmpPath){
       
           writeStream.on('finish', () => {
             console.log("entro 2");
-            resolve();
+            resolve( 'Finalizo' );
           });
       
           readStream.pipe(writeStream);
