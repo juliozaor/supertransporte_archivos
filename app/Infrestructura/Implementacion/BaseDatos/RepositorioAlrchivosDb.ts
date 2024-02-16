@@ -22,12 +22,18 @@ export class RepositorioArchivosDb implements RepositorioArchivos {
             }
         }
         //const basePath = `./archivos`; // local
-        const rutaArchivo =  path.resolve(__dirname, '..', '..', '..', '..', '..', '..', 'archivos');
+        const rutaArchivo =  path.resolve(__dirname, '..', '..', '..', '..', 'archivos');
+        const rutaArchivo4 =  path.resolve(__dirname, '..', '..', '..', '..', '..', 'archivos');
+        const rutaArchivo5 =  path.resolve(__dirname, '..', '..', '..', '..', '..', 'archivos');
+
         const rutaArchivo2 =  path.resolve(__dirname, '..',  '..', '..', 'archivos');
         const rutaArchivo3 =  path.resolve(__dirname, '..',  '..', 'archivos');
         console.log(rutaArchivo);
         console.log(rutaArchivo2);
         console.log(rutaArchivo3);
+        console.log(rutaArchivo4);
+        console.log(rutaArchivo5);
+        
         const basePath = rutaArchivo; // desplegado
         // const basePath = `/bodegapesv`; // desplegado
         /* 
